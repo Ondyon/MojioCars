@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MojioCars</string>
+	<string name="label_no_tracks">No Tracks yet</string>
+	<string name="trip_start">Start: </string>
+	<string name="trip_end">End:</string>
+	<string name="trip_date">Date:</string>
+	<string name="trip_speed">Max Speed: </string>
+	<string name="unit_km_h">km / h</string>
+</resources>

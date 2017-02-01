@@ -1,0 +1,21 @@
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	>
+
+	<ImageView
+		android:id="@+id/progress_button_refresh"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:background="@drawable/circle"
+		android:layout_gravity="center"
+		/>
+	<ImageView
+		android:id="@+id/progress_button_progress"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/bt_progress"
+		android:layout_gravity="center"
+		/>
+</FrameLayout>

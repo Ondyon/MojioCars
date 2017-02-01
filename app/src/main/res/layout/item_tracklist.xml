@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="0dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+	android:orientation="vertical"
+	>
+
+	<TextView
+		android:id="@+id/item_tracklist_start_hdr"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/trip_start"
+		android:drawableLeft="@android:drawable/ic_dialog_map"
+		android:drawablePadding="4dp"
+		style="@style/item_tracklist_titles"/>
+	<TextView
+		android:id="@+id/item_tracklist_start"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		style="@style/item_tracklist_values"
+		android:layout_toRightOf="@id/item_tracklist_start_hdr"
+		/>
+
+	<TextView
+		android:id="@+id/item_tracklist_end_hdr"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/trip_end"
+		style="@style/item_tracklist_titles"
+		android:drawableLeft="@android:drawable/ic_dialog_map"
+		android:drawablePadding="4dp"
+		android:layout_below="@id/item_tracklist_start_hdr"/>
+	<TextView
+		android:id="@+id/item_tracklist_end"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		style="@style/item_tracklist_values"
+		android:layout_toRightOf="@id/item_tracklist_start_hdr"
+		android:layout_below="@id/item_tracklist_start_hdr"
+		/>
+
+	<TextView
+		android:id="@+id/item_tracklist_date_hdr"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/trip_date"
+		style="@style/item_tracklist_titles"
+		android:drawableLeft="@android:drawable/ic_menu_today"
+		android:drawablePadding="4dp"
+		android:layout_below="@id/item_tracklist_end_hdr"/>
+	<TextView
+		android:id="@+id/item_tracklist_date"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		style="@style/item_tracklist_values"
+		android:layout_toRightOf="@id/item_tracklist_start_hdr"
+		android:layout_below="@id/item_tracklist_end_hdr"
+		/>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="#44000000"
+		android:layout_below="@id/item_tracklist_date_hdr"
+		android:layout_marginTop="@dimen/activity_vertical_margin"
+		/>
+
+</RelativeLayout>

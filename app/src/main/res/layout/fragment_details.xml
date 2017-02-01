@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:paddingBottom="0dp"
+	android:paddingLeft="@dimen/activity_horizontal_margin"
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin"
+	android:orientation="vertical"
+	android:background="#FFFFFFFF"
+	android:clickable="true"
+	>
+
+	<TextView
+		android:id="@+id/det_tracklist_start_hdr"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/trip_start"
+		android:drawableLeft="@android:drawable/ic_dialog_map"
+		android:drawablePadding="4dp"
+		style="@style/item_tracklist_titles"/>
+	<TextView
+		android:id="@+id/det_tracklist_start"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="6dp"
+		style="@style/item_tracklist_values"
+		android:layout_toRightOf="@id/det_tracklist_start_hdr"
+		/>
+
+	<TextView
+		android:id="@+id/det_tracklist_end_hdr"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="@string/trip_end"
+		style="@style/item_tracklist_titles"
+		android:drawableLeft="@android:drawable/ic_dialog_map"
+		android:drawablePadding="4dp"
+		android:layout_below="@id/det_tracklist_start_hdr"/>
+	<TextView
+		android:id="@+id/det_tracklist_end"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_marginLeft="6dp"
+		style="@style/item_tracklist_values"
+		android:layout_toRightOf="@id/det_tracklist_start_hdr"
+		android:layout_below="@id/det_tracklist_start_hdr"
+		/>
+
+	<TextView
+		android:id="@+id/det_tracklist_date_hdr"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="@string/trip_date"
+		style="@style/item_tracklist_titles"
+		android:drawableLeft="@android:drawable/ic_menu_today"
+		android:drawablePadding="4dp"
+		android:layout_below="@id/det_tracklist_end_hdr"/>
+	<TextView
+		android:id="@+id/det_tracklist_date"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_marginLeft="6dp"
+		style="@style/item_tracklist_values"
+		android:layout_toRightOf="@id/det_tracklist_start_hdr"
+		android:layout_below="@id/det_tracklist_end_hdr"
+		/>
+
+	<TextView
+		android:id="@+id/det_tracklist_speed_hdr"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="@string/trip_speed"
+		style="@style/item_tracklist_titles"
+		android:drawableLeft="@android:drawable/ic_dialog_alert"
+		android:drawablePadding="4dp"
+		android:layout_below="@id/det_tracklist_date_hdr"/>
+	<TextView
+		android:id="@+id/det_tracklist_speed"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:layout_marginLeft="6dp"
+		style="@style/item_tracklist_values"
+		android:layout_toRightOf="@id/det_tracklist_speed_hdr"
+		android:layout_below="@id/det_tracklist_date_hdr"
+		/>
+
+
+</RelativeLayout>
