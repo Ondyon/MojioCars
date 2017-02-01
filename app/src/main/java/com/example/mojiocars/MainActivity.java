@@ -12,21 +12,40 @@ import java.util.List;
 
 import io.moj.java.sdk.MojioClient;
 import io.moj.java.sdk.model.Trip;
-import io.moj.java.sdk.model.User;
 import io.moj.java.sdk.model.response.ListResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+
+/*
+here is 2 different approaches demonstrated on 2 fragments
+
+1 TripListFragment:
+ keep data and all data processing on base activity,
+ this allow to keep data persistence and fast UI (on fragments) independent from data loading (in base Activity)
+ MainActivity creates tripsReadyListener
+ InterfaceHolder provides the access to it for fragment
+ TripListFragment get it onAttach() and subscribes to dataLoaded event using it
+
+2 DetailsFragment:
+ All OneTrip related data methods (loading and processing) are concentrated in Fragment
+
+1st approach shows better UX
+2nd approach provides better architecture, code refactoring etc.
+
+ */
+
+
+public class MainActivity extends AppCompatActivity implements DataListener<String>, InterfaceHolder {
 
     App app;
 	private MojioClient mojioClient;
 	private List<Trip> trips;
-	private DataReadyListener tripsReadyListener;
-	private DataReadyListener detailsReadyListener;
+	private DataReadyListener tripsReadyListener = new DataReadyListener<List<Trip>>();
 	private FragmentManager fm;
 	private ProgressSpinner progress;
+
 
 
 	@Override
@@ -34,15 +53,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         app = ((App) getApplicationContext());
         mojioClient = app.getMojioClient();
 
 		progress = (ProgressSpinner) findViewById(R.id.progress_spinner);
 
-
-		tripsReadyListener = new DataReadyListener<List<Trip>>();	// Dependency Injection
-		Fragment newFragment = TripListFragment.newInstance(tripsReadyListener);
+		Fragment newFragment = TripListFragment.newInstance();
 
 		fm = getSupportFragmentManager();
 		fm.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -57,20 +73,7 @@ public class MainActivity extends AppCompatActivity {
 				.commit();
 
 
-		mojioClient.login("ondyon@yandex.ru", "MojioMojio").enqueue(new Callback<User>() {
-			@Override
-			public void onResponse(Call<User> call, Response<User> response) {
-				//Toast.makeText(getApplicationContext(), "logged as " + response.body().getUserName(), Toast.LENGTH_SHORT).show();
-				loadTrips(tripsReadyListener);
-			}
-
-			@Override
-			public void onFailure(Call<User> call, Throwable t) {
-				Toast.makeText(getApplicationContext(), "Error Login", Toast.LENGTH_SHORT).show();
-			}
-		});
-
-
+		loadTrips(tripsReadyListener);
 	}
 
 
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 			public void onResponse(Call<ListResponse<Trip>> call, Response<ListResponse<Trip>> response) {
 				progress.setProgress(false);
 				trips = response.body().getData();
-				readyListener.ready(trips);
+				readyListener.notify(trips);
 			}
 
 			@Override
@@ -105,35 +108,23 @@ public class MainActivity extends AppCompatActivity {
 		});
 	}
 
-	private void loadDetails(String tag, final DataReadyListener<Trip> readyListener) {
-		progress.setProgress(true);
-		mojioClient.rest().getTrip(tag).enqueue(new Callback<Trip>() {
-
-			@Override
-			public void onResponse(Call<Trip> call, Response<Trip> response) {
-				progress.setProgress(false);
-				Trip trip = response.body();
-				readyListener.ready(trip);
-			}
-
-			@Override
-			public void onFailure(Call<Trip> call, Throwable t) {
-				progress.setProgress(false);
-				Toast.makeText(getApplicationContext(), "Error fetching trip list", Toast.LENGTH_SHORT).show();
-			}
-		});
-	}
-
 
 	public void launchDetailsFragment(String tag) {
-		detailsReadyListener = new DataReadyListener<Trip>();	// Dependency Injection
-		Fragment newFragment = DetailsFragment.newInstance(detailsReadyListener);
+		Fragment newFragment = DetailsFragment.newInstance(tag);
 		fm.beginTransaction()
 				.add(R.id.main_fragment_container, newFragment)
 				.addToBackStack(null)
 				.commit();
+		}
 
-		loadDetails(tag, detailsReadyListener);
+	@Override
+	public void onComes(String data) {
+		launchDetailsFragment(data);
+	}
+
+	@Override
+	public DataReadyListener<List<Trip>> getTripsReadyListener() {
+		return tripsReadyListener;
 	}
 
 }

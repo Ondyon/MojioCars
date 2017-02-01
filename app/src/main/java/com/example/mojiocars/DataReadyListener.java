@@ -5,7 +5,7 @@ public class DataReadyListener<T> {
 
 	private DataListener<T> dataCallback = null;
 
-	void ready(T trips) {
+	void notify(T trips) {
 		if(dataCallback != null) dataCallback.onComes(trips);
 	}
 

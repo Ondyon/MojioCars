@@ -1,6 +1,5 @@
 package com.example.mojiocars;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,12 @@ import io.moj.java.sdk.model.Trip;
 
 public class TripListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-	private final Context context;
+	private final DataListener<String> listener;
 	private List<Trip> tracks;
 
-	public TripListAdapter(Context c) {
+	public TripListAdapter(DataListener<String> c) {
 		super();
-		context = c;
+		listener = c;
 	}
 
 
@@ -54,7 +53,7 @@ public class TripListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 		((RecycleItem) holder).mRootView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((MainActivity)context).launchDetailsFragment((String)v.getTag());
+				listener.onComes((String)v.getTag());
 			}
 		});
 

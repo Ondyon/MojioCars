@@ -1,22 +1,26 @@
 package com.example.mojiocars;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.moj.java.sdk.MojioClient;
 import io.moj.java.sdk.model.Trip;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class DetailsFragment extends Fragment {
 
+	private static final String PARAM_ID = "paramID";
 	private String id;
 	private App app;
 	private MojioClient mojioClient;
@@ -35,11 +39,13 @@ public class DetailsFragment extends Fragment {
 	 * this fragment using the provided parameters.
 	 *
 	 * @return A new instance of fragment HousingFragment.
-	 * @param l
 	 */
-	public static DetailsFragment newInstance(DataReadyListener<Trip> l) {
+	public static DetailsFragment newInstance(String id) {
 		DetailsFragment fragment = new DetailsFragment();
-		fragment.dataObject = l;
+        Bundle args = new Bundle();
+        args.putString(PARAM_ID, id);
+        fragment.setArguments(args);
+
 		return fragment;
 	}
 
@@ -48,6 +54,9 @@ public class DetailsFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		app = ((App) getActivity().getApplicationContext());
 		mojioClient = app.getMojioClient();
+        if (getArguments() != null) {
+            id = getArguments().getString(PARAM_ID);
+        }
 	}
 
 	@Override
@@ -59,8 +68,31 @@ public class DetailsFragment extends Fragment {
 		tvDate = (TextView) view.findViewById(R.id.det_tracklist_date);
 		tvSpeed = (TextView) view.findViewById(R.id.det_tracklist_speed);
 
+		loadDetails(id);
+
 		return view;
 	}
+
+
+	private void loadDetails(String tag) {
+		//progress.setProgress(true);
+		mojioClient.rest().getTrip(tag).enqueue(new Callback<Trip>() {
+
+			@Override
+			public void onResponse(Call<Trip> call, Response<Trip> response) {
+				//progress.setProgress(false);
+				Trip trip = response.body();
+				showData(trip);
+			}
+
+			@Override
+			public void onFailure(Call<Trip> call, Throwable t) {
+				//progress.setProgress(false);
+				Toast.makeText(getActivity().getApplicationContext(), "Error fetching trip list", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
 
 	private void showData(Trip dataItem) {
 		tvStart.setText(dataItem.getStartLocation().getAddress().getCity());
@@ -73,7 +105,6 @@ public class DetailsFragment extends Fragment {
 	}
 
 	private String getUnitText(String s) {
-		String out = s;
 		switch(s) {
 			case "KILOMETERS_PER_HOUR": s = getResources().getString(R.string.unit_km_h);
 				break;
@@ -83,25 +114,4 @@ public class DetailsFragment extends Fragment {
 	}
 
 
-	DataListener<Trip> dataCallback = new DataListener<Trip>() {
-		@Override
-		public void onComes(Trip data) {
-			showData(data);
-		}
-	};
-
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		if(dataObject != null)
-			dataObject.subscribe(dataCallback);
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		if(dataObject != null)
-			dataObject.subscribe(null);
-	}
 }

@@ -22,6 +22,14 @@ public class TripListFragment extends Fragment {
 	private TripListAdapter tripListAdapter;
 	private DataReadyListener<List<Trip>> dataObject;
 
+	public DataListener<String> eventInterface = new DataListener<String>() {
+		@Override
+		public void onComes(String data) {
+			((MainActivity)getActivity()).launchDetailsFragment(data);
+		}
+	};
+	private DataListener<String> listener;
+
 
 	public TripListFragment() {
 	}
@@ -31,26 +39,17 @@ public class TripListFragment extends Fragment {
 	 * this fragment using the provided parameters.
 	 *
 	 * @return A new instance of fragment HousingFragment.
-	 * @param tripsReadyListener
 	 */
-	public static TripListFragment newInstance(DataReadyListener tripsReadyListener) {
+	public static TripListFragment newInstance() {
 		TripListFragment fragment = new TripListFragment();
-		fragment.dataObject = tripsReadyListener;
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
 		return fragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
 	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +58,7 @@ public class TripListFragment extends Fragment {
 		labelEmpty = (TextView) view.findViewById(R.id.label_empty_list);
 
 		rvTripList = (RecyclerView) view.findViewById(R.id.rv_trips_list);
-		tripListAdapter = new TripListAdapter(getActivity());
+		tripListAdapter = new TripListAdapter(listener);
 		rvTripList.setAdapter(tripListAdapter);
 		rvTripList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -79,6 +78,9 @@ public class TripListFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
+		listener = (DataListener<String>)context;
+		InterfaceHolder dataObj = (InterfaceHolder) context;
+		dataObject = dataObj.getTripsReadyListener();
 		if(dataObject != null)
 			dataObject.subscribe(dataCallback);
 	}
@@ -88,6 +90,7 @@ public class TripListFragment extends Fragment {
 		super.onDetach();
 		if(dataObject != null)
 			dataObject.subscribe(null);
+		listener = null;
 	}
 
 
